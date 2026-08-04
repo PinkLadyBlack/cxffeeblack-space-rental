@@ -554,13 +554,6 @@
           </div>
         </div>
 
-        <div class="field">
-          <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
-            <input type="checkbox" id="specialCase" style="width:16px;height:16px;accent-color:var(--copper);">
-            <span style="text-transform:none; font-size:14px; color:var(--cream);">This qualifies as a special case (2-hour minimum instead of 4)</span>
-          </label>
-        </div>
-
         <h2 class="h" style="margin-top:36px; font-size:20px;">Add-ons</h2>
         <label class="addon">
           <input type="checkbox" id="addonAV">
@@ -665,7 +658,7 @@ function calcHours(){
 
 function updateTicket(){
   const rawHours = calcHours();
-  const min = $('specialCase').checked ? 2 : 4;
+  const min = 4;
   const billedHours = rawHours > 0 ? Math.max(rawHours, min) : min;
   const base = billedHours * 100;
   const av = $('addonAV').checked ? 50 : 0;
@@ -722,7 +715,7 @@ function updateTicket(){
   return {rawHours, billedHours, base, av, cleaning, promoValid, waived, promoDiscount: waived ? preDiscountTotal : Math.min(promoDiscount, preDiscountTotal), total, min};
 }
 
-['startTime','endTime','specialCase','addonAV','eventDate','promoCode'].forEach(id=>{
+['startTime','endTime','addonAV','eventDate','promoCode'].forEach(id=>{
   $(id).addEventListener('input', updateTicket);
   $(id).addEventListener('change', updateTicket);
 });
@@ -833,7 +826,6 @@ $('rentalForm').addEventListener('submit', async function(e){
     eventDate: $('eventDate').value,
     startTime: $('startTime').value,
     endTime: $('endTime').value,
-    specialCase: $('specialCase').checked,
     addonAV: $('addonAV').checked,
     ackFurniture: $('ackFurniture').checked,
     promoCode: $('promoCode').value.trim().toUpperCase(),
@@ -871,7 +863,7 @@ $('rentalForm').addEventListener('submit', async function(e){
   line('Type: ' + data.eventType);
   line('Headcount: ' + data.headcount);
   line('Date: ' + data.eventDate);
-  line('Time: ' + data.startTime + ' – ' + data.endTime + (data.specialCase ? ' (special case, 2-hr min)' : ' (4-hr min)'));
+  line('Time: ' + data.startTime + ' – ' + data.endTime + ' (4-hr min)');
   y += 4;
 
   line('PRICING', 12, 7, 'bold');
